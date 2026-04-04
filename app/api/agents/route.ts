@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   const agents = await prisma.agent.findMany({
     include: { runs: { orderBy: { startedAt: "desc" }, take: 1 } },
