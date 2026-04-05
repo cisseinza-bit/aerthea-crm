@@ -23,13 +23,16 @@ function NewClientModal({ onClose, onCreated }: { onClose: () => void; onCreated
     e.preventDefault();
     if (!form.name || !form.email || !form.company) return;
     setSaving(true);
-    const res = await fetch("/api/clients", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    if (res.ok) { onCreated(await res.json()); onClose(); }
-    setSaving(false);
+    try {
+      const res = await fetch("/api/clients", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (res.ok) { onCreated(await res.json()); onClose(); }
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -105,13 +108,16 @@ function NewProjectModal({ client, onClose, onCreated }: { client: Client; onClo
     e.preventDefault();
     if (!title || phases.length === 0) return;
     setSaving(true);
-    const res = await fetch("/api/projects", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, clientId: client.id, budget, status, phases }),
-    });
-    if (res.ok) { onCreated(); onClose(); }
-    setSaving(false);
+    try {
+      const res = await fetch("/api/projects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title, clientId: client.id, budget, status, phases }),
+      });
+      if (res.ok) { onCreated(); onClose(); }
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (

@@ -46,15 +46,18 @@ export default function AgentCard({ agent }: { agent: Agent }) {
     e.preventDefault();
     if (sending) return;
     setSending(true);
-    await fetch(`/api/agents/${agent.name.toLowerCase()}/run`, {
-      method:  "POST",
-      headers: { "Content-Type": "application/json" },
-      body:    JSON.stringify({ input: brief }),
-    });
-    setBrief("");
-    setOpen(false);
-    setSending(false);
-    router.refresh();
+    try {
+      await fetch(`/api/agents/${agent.name.toLowerCase()}/run`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ input: brief }),
+      });
+      setBrief("");
+      setOpen(false);
+      router.refresh();
+    } finally {
+      setSending(false);
+    }
   }
 
   const statusLabel =

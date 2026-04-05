@@ -47,10 +47,21 @@ export default function DossierPage() {
   }
 
   useEffect(() => {
-    loadMessages();
-    loadFiles();
-    const interval = setInterval(loadMessages, 5000);
-    return () => clearInterval(interval);
+    let cancelled = false;
+    async function init() {
+      const [msgRes, fileRes] = await Promise.all([
+        fetch(`/api/dossiers/${projectId}/messages`),
+        fetch(`/api/dossiers/${projectId}/upload`),
+      ]);
+      if (cancelled) return;
+      if (msgRes.ok)  setMessages(await msgRes.json());
+      if (fileRes.ok) setFiles(await fileRes.json());
+    }
+    init();
+    const interval = setInterval(() => {
+      if (!cancelled) loadMessages();
+    }, 5000);
+    return () => { cancelled = true; clearInterval(interval); };
   }, [projectId]);
 
   useEffect(() => {

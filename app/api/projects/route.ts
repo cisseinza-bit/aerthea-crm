@@ -13,6 +13,9 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const { title, clientId, budget, status, phases } = await req.json();
+  if (!title?.trim() || !clientId) {
+    return NextResponse.json({ error: "title et clientId sont requis" }, { status: 400 });
+  }
   const project = await prisma.project.create({
     data: {
       title,

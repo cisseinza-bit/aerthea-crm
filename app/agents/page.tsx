@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import AgentCard from "@/components/AgentCard";
 
+
 export const dynamic = "force-dynamic";
 
 export default async function AgentsPage() {

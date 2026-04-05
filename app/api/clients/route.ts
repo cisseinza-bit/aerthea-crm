@@ -13,6 +13,9 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const { name, email, company, budget, status, color } = await req.json();
+  if (!name?.trim() || !email?.trim() || !company?.trim()) {
+    return NextResponse.json({ error: "name, email et company sont requis" }, { status: 400 });
+  }
   const client = await prisma.client.create({
     data: { name, email, company, status: status ?? "prospect", color: color ?? "#E8630A" },
     include: { projects: true },
