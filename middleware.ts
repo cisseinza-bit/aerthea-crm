@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const PUBLIC_PATHS = ["/login", "/api/auth/login"];
+const PUBLIC_PATHS = ["/login", "/api/auth/login", "/api/health"];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  // Laisser passer les chemins publics et les assets
   if (
     PUBLIC_PATHS.some(p => pathname.startsWith(p)) ||
     pathname.startsWith("/_next") ||

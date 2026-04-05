@@ -45,7 +45,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
     // 4. Si la phase contient "Audit" → trigger IRIS
     if (phase.title.toLowerCase().includes("audit")) {
-      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000"}/api/agents/iris/trigger`, {
+      const baseUrl = process.env.RAILWAY_PUBLIC_DOMAIN
+        ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+        : (process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000");
+      await fetch(`${baseUrl}/api/agents/iris/trigger`, {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body:    JSON.stringify({
